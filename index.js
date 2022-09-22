@@ -28,6 +28,17 @@ app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/comments", commentRoutes);
 
+// Middlewere to send errors
+app.use((error, request, response, next) => {
+  const status = error.status || 500;
+  const message = error.message || "Something went wrong on the server!";
+  return response.status(status).json({
+    success: false,
+    status,
+    message
+  });
+});
+
 app.listen(8800, () => {
   connect();
   console.log("Connected to Server!");
