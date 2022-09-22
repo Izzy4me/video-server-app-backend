@@ -1,16 +1,21 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 import User from "../models/User.js"
 
 
 export const signup = async (request, response) => {
   console.log(request.body);
-  console.log(response);
 
   try {
-    const newUser = new User(request.body);
-  } catch(err) {
-    // TODO: handle me
-    console.error(err);
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(request.body.password, salt);
+
+    const newUser = new User({...request.body, password: hashedPassword});
+    await newUser.save();
+
+    response.status(200).send("User has been created!");
+  } catch(error) {
+    console.log(error);
   }
 };
