@@ -1,12 +1,12 @@
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.js";
 import commentRoutes from "./routes/comments.js";
 import userRoutes from "./routes/users.js";
 import videoRoutes from "./routes/videos.js";
-
 
 const app = express();
 dotenv.config();
@@ -23,6 +23,7 @@ const connect = () => {
 };
 
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
@@ -35,7 +36,7 @@ app.use((error, request, response, next) => {
   return response.status(status).json({
     success: false,
     status,
-    message
+    message,
   });
 });
 
