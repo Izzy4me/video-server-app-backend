@@ -44,23 +44,24 @@ export const removeUser = async (request, response, next) => {
   }
 };
 
+// TODO: check if you already subscribed or not becore operating on subscribtions table
 export const subscribe = async (request, response, next) => {
   try {
-    await User.findById(request.user.id, {
-      $push: { subscribedUsers: request.params.id }
+    await User.findByIdAndUpdate(request.user.id, {
+      $push: { subscribedUsers: request.params.id },
     });
     await User.findByIdAndUpdate(request.params.id, {
       $inc: { subscribers: 1 }
     });
     response.status(200).json("Subscribe action successful!");
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
 export const unsubscribe = async (request, response, next) => {
   try {
-    await User.findById(request.user.id, {
+    await User.findByIdAndUpdate(request.user.id, {
       $pull: { subscribedUsers: request.params.id },
     });
     await User.findByIdAndUpdate(request.params.id, {
@@ -68,7 +69,7 @@ export const unsubscribe = async (request, response, next) => {
     });
     response.status(200).json("Unsubscribe action successful!");
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
@@ -76,7 +77,7 @@ export const like = async (request, response, next) => {
   try {
     console.log("Like feature not implemented yet!");
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
@@ -84,6 +85,6 @@ export const dislike = async (request, response, next) => {
   try {
     console.log("Dislike feature not implemented yet!");
   } catch (error) {
-    next(err);
+    next(error);
   }
 };

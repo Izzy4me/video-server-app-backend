@@ -10,9 +10,9 @@ const router = express.Router();
 router.get("/:id", getUser);
 router.put("/:id", verifyToken, updateUser);
 router.delete("/:id", verifyToken, removeUser);
-router.get("/subscribe:userId", verifyToken, subscribe);
-router.get("/unsubscribe:userId", verifyToken, unsubscribe);
-router.get("/like:videoId", verifyToken, like);
-router.get("/dislike:videoId", verifyToken, dislike);
+router.put("/subscribe/:id", verifyToken, subscribe);
+router.put("/unsubscribe/:id", verifyToken, unsubscribe);
+router.put("/like/:videoId", verifyToken, like);
+router.put("/dislike/:videoId", verifyToken, dislike);
 
 export default router;
