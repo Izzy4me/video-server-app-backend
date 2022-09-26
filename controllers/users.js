@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Video from "../models/Video.js";
 import { createError } from "../utils/error.js";
 
 export const getUser = async (request, response, next) => {
@@ -74,16 +75,30 @@ export const unsubscribe = async (request, response, next) => {
 };
 
 export const like = async (request, response, next) => {
+  const userId = request.user.id;
+  const videoId = request.params.videoId;
   try {
-    console.log("Like feature not implemented yet!");
+    // $addToSet Atlas method is really cleaver method which won't duplicate my id 
+    // like $push 
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { likes: userId },
+      $pull: { dislikes: userId },
+    });
+    response.status(200).json("Video has been liked!");
   } catch (error) {
     next(error);
   }
 };
 
 export const dislike = async (request, response, next) => {
+  const userId = request.user.id;
+  const videoId = request.params.videoId;
   try {
-    console.log("Dislike feature not implemented yet!");
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { dislikes: userId },
+      $pull: { likes: userId },
+    });
+    response.status(200).json("Video has been disliked!");
   } catch (error) {
     next(error);
   }
